@@ -1,0 +1,51 @@
+name: Build
+on:
+  pull_request:
+    types:
+      - opened
+      - edited
+      - reopened
+      - synchronize
+    branches:
+      - main
+  push:
+    branches:
+      - main
+    tags:
+      - '*'
+
+# Need ID token write permission to use OIDC
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  run_job_with_aws:
+    runs-on: ubuntu-22.04
+    environment: main
+    steps:
+      - name: Checkout source code from Github
+        uses: actions/checkout@v5
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@main # Or a specific version
+        with:
+          role-to-assume: arn:aws:iam::139984031189:role/aux-20251027123123374300000001
+          aws-region: eu-west-1
+      - name: Terraform checks
+        working-directory: terraform/aws/environments/dev
+        run: |
+          # Your commands that require AWS credentials
+          #aws sts get-caller-identity
+          terraform init
+          terraform validate
+      
+      - name: Scan Terraform
+        uses: aquasecurity/trivy-action@0.33.1
+        with: 
+          scan-type: 'fs'
+          scan-ref: 'terraform/'
+          scanners: 'vuln,secret,misconfig'
+          severity: 'CRITICAL,HIGH,MEDIUM,LOW,UNKNOWN'
+          exit-code: 0
+          skip-dirs: '.terraform'
