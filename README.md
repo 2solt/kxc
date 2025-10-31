@@ -97,8 +97,10 @@ kubectl port-forward svc/dev-main -n dev-main 8080:8080
 ## Testing with curl against the main application
 
 List all S3 buckets in the AWS account:
-```
+```sh
 curl -sX GET "127.0.0.1:8080/buckets" | jq .
+```
+```json
 {
   "version": "50d3f027b0305870577be4c0ce93515076bc8527",
   "aux_version": "02240ef42de5a2cc068da28c08a562eb9ee6ee2c",
@@ -110,8 +112,10 @@ curl -sX GET "127.0.0.1:8080/buckets" | jq .
 ```
 
 List all parameters stored in AWS Parameter Store:
-```
+```sh
 curl -sX GET "127.0.0.1:8080/parameters" | jq .
+```
+```json
 {
   "version": "50d3f027b0305870577be4c0ce93515076bc8527",
   "aux_version": "02240ef42de5a2cc068da28c08a562eb9ee6ee2c",
@@ -124,8 +128,10 @@ curl -sX GET "127.0.0.1:8080/parameters" | jq .
 ```
 
 Retrieve the value of a specific parameter from AWS Parameter Store:
-``` 
+```sh
 curl -sX GET "127.0.0.1:8080/parameters/a" | jq .
+```
+```json
 {
   "version": "50d3f027b0305870577be4c0ce93515076bc8527",
   "aux_version": "02240ef42de5a2cc068da28c08a562eb9ee6ee2c",
@@ -136,8 +142,10 @@ curl -sX GET "127.0.0.1:8080/parameters/a" | jq .
 ## Testing with curl against the main application
 
 List all S3 buckets in the AWS account:
-```
+```sh
 curl -sX GET "127.0.0.1:8081/buckets" | jq .
+```
+```json
 {
   "version": "02240ef42de5a2cc068da28c08a562eb9ee6ee2c",
   "data": [
@@ -148,8 +156,10 @@ curl -sX GET "127.0.0.1:8081/buckets" | jq .
 ```
 
 List all parameters stored in AWS Parameter Store:
-```
+```sh
 curl -sX GET "127.0.0.1:8081/parameters" | jq .
+```
+```json
 {
   "version": "02240ef42de5a2cc068da28c08a562eb9ee6ee2c",
   "data": [
@@ -161,8 +171,10 @@ curl -sX GET "127.0.0.1:8081/parameters" | jq .
 ```
 
 Retrieve the value of a specific parameter from AWS Parameter Store:
-``` 
+```sh
 curl -sX GET "127.0.0.1:8081/parameters/a" | jq .
+```
+```json
 {
   "version": "02240ef42de5a2cc068da28c08a562eb9ee6ee2c",
   "data": "1"
