@@ -1,0 +1,46 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: kxc
+spec:
+  generators:
+  - matrix:
+      generators:
+      - list:
+          elements:
+          - name: main
+            repoURL: https://github.com/2solt/main-kxc.git
+            path: helm/main
+          - name: aux
+            repoURL: https://github.com/2solt/aux-kxc.git
+            path: helm/aux
+      - list:
+          elements:
+          - env: dev
+            valuesFile: dev-values.yaml
+          #- env: staging
+          #  valuesFile: values-staging.yaml
+          #- env: live
+          #  valuesFile: values-live.yaml
+
+  template:
+    metadata:
+      name: '{{env}}-{{name}}'
+    spec:
+      project: default
+      source:
+        repoURL: '{{repoURL}}'
+        targetRevision: HEAD
+        path: '{{path}}'
+        helm:
+          valueFiles:
+          - '{{valuesFile}}'
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: '{{env}}-{{name}}'
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true
+        syncOptions:
+        - CreateNamespace=true

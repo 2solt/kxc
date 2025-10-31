@@ -20,7 +20,7 @@ permissions:
   contents: read
 
 jobs:
-  run_job_with_aws:
+  terraform_checks:
     runs-on: ubuntu-22.04
     environment: main
     steps:
@@ -28,7 +28,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@main # Or a specific version
+        uses: aws-actions/configure-aws-credentials@v5.1.0
         with:
           role-to-assume: arn:aws:iam::139984031189:role/aux-20251027123123374300000001
           aws-region: eu-west-1
